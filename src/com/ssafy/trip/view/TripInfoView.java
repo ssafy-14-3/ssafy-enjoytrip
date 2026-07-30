@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.List;
 
@@ -66,11 +68,11 @@ public class TripInfoView {
 
 		/* 메인 화면 설정 */
 		frame = new JFrame("Enjoy! Trip - 즐거운 여행");
-//		frame.addWindowListener(new WindowAdapter() {
-//			public void windowClosing(WindowEvent e){
-//				frame.dispose();
-//			}
-//		});
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e){
+				frame.dispose();
+			}
+		});
 
 		setMain();
 
@@ -190,14 +192,16 @@ public class TripInfoView {
 		// searchBt.addActionListener( /* 여기 */ );
 
 		// 참조코드 시작 - 위 코드를 완성 후 삭제 또는 comment 처리하세요.
-		ActionListener buttonHandler = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				searchTrips();
-			}
-		};
 		
-		searchBt.addActionListener( buttonHandler );
+		searchBt.addActionListener(e -> searchTrips());
+//		ActionListener buttonHandler = new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				searchTrips();
+//			}
+//		};
+		
+//		searchBt.addActionListener( buttonHandler );
 		// 참조코드 종료
 
 		showTrips();
@@ -241,7 +245,7 @@ public class TripInfoView {
 		}
 	}
 
-//	public static void main(String[] args) {
-//		new TripInfoView();
-//	}
+	public static void main(String[] args) {
+		new TripInfoView();
+	}
 }
