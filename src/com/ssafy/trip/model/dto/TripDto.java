@@ -90,7 +90,7 @@ public class TripDto {
 	}
 
 	public String getImg() {
-		return img;
+		return "image%02d.jpg".formatted((int)(Math.random() * 11 + 1));
 	}
 
 	public void setImg(String img) {

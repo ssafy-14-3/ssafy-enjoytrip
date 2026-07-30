@@ -2,6 +2,7 @@ package com.ssafy.trip.model.service;
 
 import java.util.List;
 
+import com.ssafy.trip.model.dto.FestivalDto;
 import com.ssafy.trip.model.dto.TripDto;
 import com.ssafy.trip.model.dto.TripSearchDto;
 
@@ -22,5 +23,13 @@ public interface TripService {
 	 * @return 관광지 식별 번호에 해당하는 관광지 정보를 찾아서 리턴한다, 없으면 null이 리턴됨
 	 */
 	public TripDto search(int num);
+
+	/**
+	 * 축제 정보를 광역자치단체 2글자로 검색해서 반환.
+	 * 
+	 * @param cityName 검색할 광역자치단체 2글자
+	 * @return 광역자치단체 2글자에에 해당하는 축제 정보들을 반환, 없으면 빈 리스트가 리턴됨
+	 */
+	public List<FestivalDto> serchAllFestival(String cityName);
 
 }
