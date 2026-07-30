@@ -2,17 +2,22 @@ package com.ssafy.trip.model.service;
 
 import java.util.List;
 
+import com.ssafy.trip.model.dao.FestivalDao;
+import com.ssafy.trip.model.dao.FestivalDaoImpl;
 import com.ssafy.trip.model.dao.TripDao;
 import com.ssafy.trip.model.dao.TripDaoImpl;
+import com.ssafy.trip.model.dto.FestivalDto;
 import com.ssafy.trip.model.dto.TripDto;
 import com.ssafy.trip.model.dto.TripSearchDto;
 
 public class TripServiceImpl implements TripService {
 
 	private TripDao tripDao;
+	private FestivalDao festivalDao;
 
 	public TripServiceImpl() {
 		tripDao = new TripDaoImpl();
+		festivalDao = new FestivalDaoImpl();
 	}
 
 	/**
@@ -37,8 +42,19 @@ public class TripServiceImpl implements TripService {
 
 		// complete code #02
 		// null 을 return 하면 안됩니다. Dao Layer 의 적절한 method를 호출하여 Business Logic 을 완성하세요.
-		
+
 		return tripDao.search(num);
+	}
+
+	/**
+	 * 축제 정보를 광역자치단체 2글자로 검색해서 반환.
+	 * 
+	 * @param cityName 검색할 광역자치단체 2글자
+	 * @return 광역자치단체 2글자에에 해당하는 축제 정보들을 반환, 없으면 빈 리스트가 리턴됨
+	 */
+	@Override
+	public List<FestivalDto> serchAllFestival(String cityName) {
+		return festivalDao.searchAll(cityName);
 	}
 
 }
