@@ -45,7 +45,7 @@ public class TouristDestinationSAXHandler extends DefaultHandler {
 		if (qName.equals("관광지명")) {
 			// complete code #05
 			// 관광지명 항목을 처리하세요.
-			tripDto.setTouristDestination(uri);
+			tripDto.setTouristDestination(this.temp);
 		} else if (qName.equals("소재지도로명주소")) {
 			tripDto.setStreetAddress(this.temp);
 		} else if (qName.equals("소재지지번주소")) {
