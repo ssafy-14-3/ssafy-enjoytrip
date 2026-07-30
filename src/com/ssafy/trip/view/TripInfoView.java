@@ -339,6 +339,7 @@ public class TripInfoView {
 	            "시작일",
 	            "종료일"
 	    };
+	    
 
 	    /*
 	     * 축제 JTable의 데이터 모델

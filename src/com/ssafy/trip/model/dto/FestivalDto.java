@@ -14,6 +14,9 @@ public class FestivalDto {
 	/** 종료일 */
 	private String endDate;
 	
+	public FestivalDto() {
+		
+	}
 	
 
 	public FestivalDto(int num, String festivalName, String city, String startDate, String endDate) {

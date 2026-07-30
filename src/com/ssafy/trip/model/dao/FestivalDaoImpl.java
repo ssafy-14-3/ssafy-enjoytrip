@@ -3,6 +3,7 @@ package com.ssafy.trip.model.dao;
 import java.util.*;
 
 import com.ssafy.trip.model.dto.FestivalDto;
+import com.ssafy.trip.util.TouristDestinationJSONParser;
 
 public class FestivalDaoImpl implements FestivalDao {
 
@@ -16,11 +17,10 @@ public class FestivalDaoImpl implements FestivalDao {
 	@Override
 	public void loadData() {
 		// Todo : 축제 파서 연동
-//		FestivalSAXParser parser = new FestivalSAXParser();
-//		festivalInfo = parser.getFestivalInfo();
+		TouristDestinationJSONParser parser = new TouristDestinationJSONParser();
+		festivalInfo = parser.getFestivalInfo();
 
-		
-		festivalInfo.add(new FestivalDto(1, "ㄴㄴ", "서울", "ㄴㄴ", "ㅇㅇ"));
+//		festivalInfo.add(new FestivalDto(1, "ㄴㄴ", "서울", "ㄴㄴ", "ㅇㅇ"));
 	}
 
 	@Override
