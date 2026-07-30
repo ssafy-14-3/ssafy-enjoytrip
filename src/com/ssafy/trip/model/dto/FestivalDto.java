@@ -13,6 +13,19 @@ public class FestivalDto {
 	private String startDate;
 	/** 종료일 */
 	private String endDate;
+	
+	public FestivalDto() {
+		
+	}
+	
+
+	public FestivalDto(int num, String festivalName, String city, String startDate, String endDate) {
+		this.num = num;
+		this.festivalName = festivalName;
+		this.city = city;
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
 
 	public int getNum() {
 		return num;
