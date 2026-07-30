@@ -15,12 +15,10 @@ import com.ssafy.trip.model.dto.FestivalDto;
 
 public class TouristDestinationJSONParser {
 
-	/** 축제 정보 JSON 파일 경로 */
 	private static final String FESTIVAL_FILE_PATH = "res/2026_지역축제_개최계획.json";
 
 	private List<FestivalDto> festivalInfo;
 	private int size;
-
 	private int num = 0;
 
 	public TouristDestinationJSONParser() {
@@ -28,7 +26,6 @@ public class TouristDestinationJSONParser {
 
 		festivalInfo.forEach(System.out::println);
 	}
-
 
 	private void loadData() {
 
@@ -38,7 +35,6 @@ public class TouristDestinationJSONParser {
 		try (BufferedReader reader = new BufferedReader(
 				new InputStreamReader(new FileInputStream(FESTIVAL_FILE_PATH), StandardCharsets.UTF_8))) {
 
-			// 최상위가 배열([ ... ])이므로 JsonArray로 받는다.
 			JsonArray records = JsonParser.parseReader(reader).getAsJsonArray();
 
 			for (JsonElement element : records) {
@@ -53,9 +49,6 @@ public class TouristDestinationJSONParser {
 		}
 	}
 
-	/**
-	 * JSON 레코드 하나를 FestivalDto로 변환한다.
-	 */
 	private FestivalDto parseFestival(JsonObject record) {
 
 		FestivalDto festivalDto = new FestivalDto();
@@ -65,7 +58,7 @@ public class TouristDestinationJSONParser {
 		festivalDto.setName(getString(record, "축제명"));
 
 		JsonObject place = getObject(record, "개최장소");
-		festivalDto.setAddress(getString(place, "장소명"));
+		festivalDto.setAddress(removeCode(getString(place, "시도")));
 
 		JsonObject period = getObject(record, "개최기간");
 		festivalDto.setStartDate(getString(period, "시작일"));
@@ -74,36 +67,11 @@ public class TouristDestinationJSONParser {
 		return festivalDto;
 	}
 
-	private String makeAddress(JsonObject place) {
-		if (place == null)
-			return "";
-
-		StringBuilder sb = new StringBuilder();
-		appendIfPresent(sb, removeCode(getString(place, "시도")));
-		appendIfPresent(sb, getString(place, "시군구"));
-		appendIfPresent(sb, getString(place, "읍면동"));
-		appendIfPresent(sb, getString(place, "장소명"));
-
-		return sb.toString();
-	}
-
-	private void appendIfPresent(StringBuilder sb, String value) {
-		if (value.isEmpty() || value.equals("-"))
-			return;
-		if (sb.length() > 0)
-			sb.append(" ");
-		sb.append(value);
-	}
-
-	/** "01. 서울" → "서울" */
 	private String removeCode(String value) {
-		int idx = value.indexOf(". ");
-		return idx >= 0 ? value.substring(idx + 2) : value;
+		int idx = value.indexOf('.');
+		return idx >= 0 ? value.substring(idx + 1).trim() : value;
 	}
 
-	/**
-	 * key가 없거나 값이 null인 경우에도 예외 없이 빈 문자열을 돌려준다.
-	 */
 	private String getString(JsonObject obj, String key) {
 		if (obj == null)
 			return "";
@@ -113,9 +81,6 @@ public class TouristDestinationJSONParser {
 		return element.getAsString().trim();
 	}
 
-	/**
-	 * 중첩 객체를 안전하게 꺼낸다.
-	 */
 	private JsonObject getObject(JsonObject obj, String key) {
 		if (obj == null)
 			return null;
@@ -125,9 +90,6 @@ public class TouristDestinationJSONParser {
 		return element.getAsJsonObject();
 	}
 
-	/**
-	 * 숫자 항목을 안전하게 꺼낸다. (연번, 최초개최연도 등에 사용)
-	 */
 	@SuppressWarnings("unused")
 	private int getInt(JsonObject obj, String key) {
 		if (obj == null)
