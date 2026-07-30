@@ -28,6 +28,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
+import com.ssafy.trip.model.dto.FestivalDto;
 import com.ssafy.trip.model.dto.TripDto;
 import com.ssafy.trip.model.dto.TripSearchDto;
 import com.ssafy.trip.model.service.TripService;
@@ -235,10 +236,6 @@ public class TripInfoView {
 		showTrips();
 	}
 	
-	/**
-	 * 현재 화면에 표시된 관광지의 도로명주소를 이용해
-	 * 관련 지역 축제를 검색한다.
-	 */
 	private void showRelatedFestivals() {
 
 	    /*
@@ -268,37 +265,41 @@ public class TripInfoView {
 	        return;
 	    }
 
+	    /*
+	     * 앞뒤 공백 제거
+	     */
+	    streetAddress = streetAddress.trim();
+
+	    /*
+	     * 앞에서 두 글자를 자를 수 없는 경우
+	     */
+	    if (streetAddress.length() < 2) {
+	        JOptionPane.showMessageDialog(
+	                frame,
+	                "도로명주소에서 지역명을 추출할 수 없습니다."
+	        );
+	        return;
+	    }
+
 	    try {
 	        /*
-	         * 1. TripService를 통해 주소에서 지역명 추출
+	         * 도로명주소의 앞 두 글자 추출
 	         *
-	         * 예:
-	         * "서울특별시 성북구 ..." → "서울"
+	         * "서울특별시 중구 ..." → "서울"
+	         * "부산광역시 해운대구 ..." → "부산"
 	         */
-	        String sido =
-	                tripService.extractSido(streetAddress);
+	        String cityName = streetAddress.substring(0, 2);
 
 	        /*
-	         * 지역명을 제대로 추출하지 못한 경우
-	         */
-	        if (sido == null || sido.trim().isEmpty()) {
-	            JOptionPane.showMessageDialog(
-	                    frame,
-	                    "주소에서 지역명을 확인할 수 없습니다."
-	            );
-	            return;
-	        }
-
-	        /*
-	         * 2. 같은 TripService를 통해 축제 목록 검색
+	         * 추출한 지역명으로 축제 목록 검색
 	         */
 	        List<FestivalDto> festivals =
-	                tripService.searchFestivalsBySido(sido);
+	                tripService.serchAllFestival(cityName);
 
 	        /*
-	         * 3. 검색 결과를 모달 창으로 출력
+	         * 검색 결과를 모달 창으로 출력
 	         */
-	        showFestivalDialog(sido, festivals);
+	        showFestivalDialog(cityName, festivals);
 
 	    } catch (Exception e) {
 	        JOptionPane.showMessageDialog(
@@ -365,7 +366,7 @@ public class TripInfoView {
 	        Object[] rowData = {
 	                festival.getNum(),
 	                festival.getFestivalName(),
-	                festival.getSido(),
+	                festival.getCity(),
 	                festival.getStartDate(),
 	                festival.getEndDate()
 	        };

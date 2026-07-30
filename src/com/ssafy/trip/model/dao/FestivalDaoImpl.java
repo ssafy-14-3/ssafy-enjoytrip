@@ -1,6 +1,6 @@
 package com.ssafy.trip.model.dao;
 
-import java.util.List;
+import java.util.*;
 
 import com.ssafy.trip.model.dto.FestivalDto;
 
@@ -9,6 +9,7 @@ public class FestivalDaoImpl implements FestivalDao {
 	private List<FestivalDto> festivalInfo;
 
 	public FestivalDaoImpl() {
+		festivalInfo = new ArrayList<>();
 		loadData();
 	}
 
@@ -18,6 +19,8 @@ public class FestivalDaoImpl implements FestivalDao {
 //		FestivalSAXParser parser = new FestivalSAXParser();
 //		festivalInfo = parser.getFestivalInfo();
 
+		
+		festivalInfo.add(new FestivalDto(1, "ㄴㄴ", "서울", "ㄴㄴ", "ㅇㅇ"));
 	}
 
 	@Override
