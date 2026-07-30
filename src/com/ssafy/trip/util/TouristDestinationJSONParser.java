@@ -53,12 +53,12 @@ public class TouristDestinationJSONParser {
 
 		FestivalDto festivalDto = new FestivalDto();
 
-		festivalDto.setId(this.num++);
+		festivalDto.setNum(this.num++);
 
-		festivalDto.setName(getString(record, "축제명"));
+		festivalDto.setFestivalName(getString(record, "축제명"));
 
 		JsonObject place = getObject(record, "개최장소");
-		festivalDto.setAddress(removeCode(getString(place, "시도")));
+		festivalDto.setCity(removeCode(getString(place, "시도")));
 
 		JsonObject period = getObject(record, "개최기간");
 		festivalDto.setStartDate(getString(period, "시작일"));
