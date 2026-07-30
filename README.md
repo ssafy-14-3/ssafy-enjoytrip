@@ -63,6 +63,21 @@ Git 커밋 및 머지 이력 분석을 바탕으로 정리한 각 팀원의 담�
 
 ---
 
+## 📁 프로젝트 화면
+
+#### 관광지 정보
+
+<img width="800" height="500" alt="image" src="https://github.com/user-attachments/assets/b27845a5-469d-4412-bce4-a6c368dae1bf" />
+
+#### 주소 검색
+
+<img width="800" height="500" alt="image" src="https://github.com/user-attachments/assets/df8bffeb-8f6d-46da-83d1-28fa9ffa1730" />
+
+#### 관련 지역 축제
+
+<img width="1000" height="600" alt="image" src="https://github.com/user-attachments/assets/2e0ab009-ec02-46c0-af28-6dd9acb49cec" />
+
+
 ## 📁 프로젝트 구조 (Project Structure)
 
 ```text
