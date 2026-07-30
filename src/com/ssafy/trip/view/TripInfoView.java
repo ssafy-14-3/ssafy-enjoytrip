@@ -1,6 +1,7 @@
 package com.ssafy.trip.view;
 
 import java.awt.BorderLayout;
+
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Label;
@@ -24,6 +25,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 import com.ssafy.trip.model.dto.TripDto;
 import com.ssafy.trip.model.dto.TripSearchDto;
@@ -46,6 +49,9 @@ public class TripInfoView {
 	private JComboBox<String> findC;
 	private JTextField wordTf;
 	private JButton searchBt;
+	
+	/** 관련 지역 축제 버튼 */
+	private JButton festivalBt;
 
 	/** 조회 내용 표시할 table */
 	private DefaultTableModel tripModel;
@@ -134,8 +140,29 @@ public class TripInfoView {
 			leftR.add(tripInfoL[i]);
 		}
 		imgL = new JLabel();
-		leftCenter.add(imgL, "Center");
-		leftCenter.add(leftR, "South");
+
+		/* 관련 지역 축제 버튼 생성 */
+		festivalBt = new JButton("관련 지역 축제");
+
+		/*
+		 * 이미지와 축제 버튼을 묶는 패널
+		 */
+		JPanel imagePanel = new JPanel(new BorderLayout(0, 10));
+
+		/* 가운데에는 관광지 이미지 */
+		imagePanel.add(imgL, BorderLayout.CENTER);
+
+		/* 이미지 아래에는 축제 버튼 */
+		imagePanel.add(festivalBt, BorderLayout.SOUTH);
+
+		/*
+		 * 왼쪽 가운데 영역 구성
+		 *
+		 * CENTER : 이미지 + 축제 버튼
+		 * SOUTH  : 관광지 상세 정보
+		 */
+		leftCenter.add(imagePanel, BorderLayout.CENTER);
+		leftCenter.add(leftR, BorderLayout.SOUTH);
 
 		left.add(new JLabel("관광지 정보", JLabel.CENTER), "North");
 		left.add(leftCenter, "Center");
@@ -194,6 +221,7 @@ public class TripInfoView {
 		// 참조코드 시작 - 위 코드를 완성 후 삭제 또는 comment 처리하세요.
 		
 		searchBt.addActionListener(e -> searchTrips());
+		festivalBt.addActionListener(e -> showRelatedFestivals());
 //		ActionListener buttonHandler = new ActionListener() {
 //			@Override
 //			public void actionPerformed(ActionEvent e) {
@@ -205,6 +233,201 @@ public class TripInfoView {
 		// 참조코드 종료
 
 		showTrips();
+	}
+	
+	/**
+	 * 현재 화면에 표시된 관광지의 도로명주소를 이용해
+	 * 관련 지역 축제를 검색한다.
+	 */
+	private void showRelatedFestivals() {
+
+	    /*
+	     * 현재 선택된 관광지가 없는 경우
+	     */
+	    if (curTrip == null) {
+	        JOptionPane.showMessageDialog(
+	                frame,
+	                "관광지를 먼저 선택해주세요."
+	        );
+	        return;
+	    }
+
+	    /*
+	     * 현재 선택된 관광지의 도로명주소
+	     */
+	    String streetAddress = curTrip.getStreetAddress();
+
+	    /*
+	     * 도로명주소가 null이거나 빈 문자열인 경우
+	     */
+	    if (streetAddress == null || streetAddress.trim().isEmpty()) {
+	        JOptionPane.showMessageDialog(
+	                frame,
+	                "선택한 관광지의 도로명주소가 없습니다."
+	        );
+	        return;
+	    }
+
+	    try {
+	        /*
+	         * 1. TripService를 통해 주소에서 지역명 추출
+	         *
+	         * 예:
+	         * "서울특별시 성북구 ..." → "서울"
+	         */
+	        String sido =
+	                tripService.extractSido(streetAddress);
+
+	        /*
+	         * 지역명을 제대로 추출하지 못한 경우
+	         */
+	        if (sido == null || sido.trim().isEmpty()) {
+	            JOptionPane.showMessageDialog(
+	                    frame,
+	                    "주소에서 지역명을 확인할 수 없습니다."
+	            );
+	            return;
+	        }
+
+	        /*
+	         * 2. 같은 TripService를 통해 축제 목록 검색
+	         */
+	        List<FestivalDto> festivals =
+	                tripService.searchFestivalsBySido(sido);
+
+	        /*
+	         * 3. 검색 결과를 모달 창으로 출력
+	         */
+	        showFestivalDialog(sido, festivals);
+
+	    } catch (Exception e) {
+	        JOptionPane.showMessageDialog(
+	                frame,
+	                "축제 정보를 불러오는 중 오류가 발생했습니다.\n"
+	                        + e.getMessage()
+	        );
+	    }
+	}
+	
+	/**
+	 * 검색된 축제 목록을 모달 창으로 출력한다.
+	 */
+	private void showFestivalDialog(
+	        String sido,
+	        List<FestivalDto> festivals
+	) {
+
+	    /*
+	     * 검색 결과가 없는 경우
+	     */
+	    if (festivals == null || festivals.isEmpty()) {
+	        JOptionPane.showMessageDialog(
+	                frame,
+	                sido + " 지역의 축제 정보가 없습니다."
+	        );
+	        return;
+	    }
+
+	    /*
+	     * 축제 테이블 열 이름
+	     */
+	    String[] festivalTitle = {
+	            "연번",
+	            "축제명",
+	            "시도",
+	            "시작일",
+	            "종료일"
+	    };
+
+	    /*
+	     * 축제 JTable의 데이터 모델
+	     */
+	    DefaultTableModel festivalModel =
+	            new DefaultTableModel(festivalTitle, 0) {
+
+	                @Override
+	                public boolean isCellEditable(
+	                        int row,
+	                        int column
+	                ) {
+	                    /*
+	                     * 셀 직접 수정 금지
+	                     */
+	                    return false;
+	                }
+	            };
+
+	    /*
+	     * FestivalDto 목록을 JTable 행으로 변환
+	     */
+	    for (FestivalDto festival : festivals) {
+
+	        Object[] rowData = {
+	                festival.getNum(),
+	                festival.getFestivalName(),
+	                festival.getSido(),
+	                festival.getStartDate(),
+	                festival.getEndDate()
+	        };
+
+	        festivalModel.addRow(rowData);
+	    }
+
+	    JTable festivalTable =
+	            new JTable(festivalModel);
+
+	    festivalTable.setRowHeight(25);
+
+	    /*
+	     * 열 제목을 누르면 정렬 가능
+	     */
+	    festivalTable.setAutoCreateRowSorter(true);
+
+	    JScrollPane festivalScrollPane =
+	            new JScrollPane(festivalTable);
+
+	    /*
+	     * 세 번째 인자 true:
+	     * 모달 창으로 설정
+	     */
+	    JDialog festivalDialog =
+	            new JDialog(
+	                    frame,
+	                    sido + " 관련 지역 축제",
+	                    true
+	            );
+
+	    festivalDialog.setLayout(
+	            new BorderLayout(10, 10)
+	    );
+
+	    JLabel titleLabel =
+	            new JLabel(
+	                    sido + " 관련 축제 목록",
+	                    JLabel.CENTER
+	            );
+
+	    festivalDialog.add(
+	            titleLabel,
+	            BorderLayout.NORTH
+	    );
+
+	    festivalDialog.add(
+	            festivalScrollPane,
+	            BorderLayout.CENTER
+	    );
+
+	    festivalDialog.setSize(850, 450);
+
+	    /*
+	     * 기존 관광지 창 중앙에 표시
+	     */
+	    festivalDialog.setLocationRelativeTo(frame);
+
+	    /*
+	     * 모달 창 표시
+	     */
+	    festivalDialog.setVisible(true);
 	}
 
 	/** 검색 조건에 맞는 관광지 검색 */
