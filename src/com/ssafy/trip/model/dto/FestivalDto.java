@@ -71,4 +71,12 @@ public class FestivalDto {
 		return num == other.num;
 	}
 
+	@Override
+	public String toString() {
+		return "FestivalDto [num=" + this.num 
+				+ ", name=" + this.festivalName
+				+ ", address=" + this.city
+				+ ", startDate=" + this.startDate
+				+ ", endDate=" + this.endDate + "]";
+	}
 }
