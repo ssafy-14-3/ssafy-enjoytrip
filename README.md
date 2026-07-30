@@ -40,7 +40,7 @@ Git 커밋 및 머지 이력 분석을 바탕으로 정리한 각 팀원의 담�
 | :--- | :--- | :--- |
 | **장지형** <br>(`medAndro` / `Meda`) | **Backend Lead & Service/DAO** | • **Model / Service / DAO 레이어 구축**: `TripDaoImpl`, `TripServiceImpl` 검색(search) 로직 및 데이터 매핑 구현<br>• **축제(Festival) 모듈 신규 개발**: `FestivalDto`, `FestivalDao`, `FestivalDaoImpl` 작성 및 `TripServiceImpl` 연결<br>• **UI 동적 기능 연동**: `TripInfoView` 내 관광지 랜덤 이미지 표시 기능 구현<br>• **코드 통합 및 PR 머지**: Feature 브랜치(#2, #3) 리뷰 및 메인 브랜치 통합 관리 |
 | **서산** <br>(`dannysir`) | **Data Parsing & Utility** | • **XML SAX Parser 구현**: `TouristDestinationSAXHandler`, `TouristDestinationSAXParser`를 활용한 데이터 파싱 처리<br>• **데이터 정교화 및 버그 수정**: 관광지명 파싱 과정의 띄어쓰기/특수문자 파싱 버그 수정 및 예외 처리<br>• **단위 테스트**: `SaxTest` 작성 및 데이터 추출 검증 |
-| **maark1106** <br>(`maark1106`) | **Frontend GUI & Event Handling** | • **프로젝트 초기화**: Base 패키지 구조 설계 및 프로젝트 Initial Commit<br>• **Swing GUI 뷰 구축**: `TripInfoView` 사용자 인터페이스 레이아웃 설계 및 컴포넌트 배치<br>• **이벤트 처리 리팩토링**: 검색 버튼 클릭 이벤트 핸들러를 람다(Lambda) 표현식으로 개선하여 코드 간결성 확보 |
+| **황준영** <br>(`maark1106`) | **Frontend GUI & Event Handling** |• **Swing GUI 뷰 구축**: `TripInfoView` 사용자 인터페이스 레이아웃 설계 및 컴포넌트 배치<br>• **이벤트 처리 리팩토링**: 검색 버튼 클릭 이벤트 핸들러를 람다(Lambda) 표현식으로 개선하여 코드 간결성 확보 |
 
 ---
 
